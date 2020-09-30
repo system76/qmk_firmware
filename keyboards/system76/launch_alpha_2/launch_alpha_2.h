@@ -16,6 +16,8 @@
  */
 
 #pragma once
+#ifndef LAUNCH_ALPHA_2_H
+#define LAUNCH_ALPHA_2_H
 
 #include "quantum.h"
 
@@ -36,3 +38,5 @@
     { K50, K51, K52, K53, K54, K3D, K55, K56, K57, K58, K59, K5A, K5B, K2E }, \
 }
 // clang-format on
+
+#endif // LAUNCH_ALPHA_2_H

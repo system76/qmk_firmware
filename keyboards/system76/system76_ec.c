@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  *  Copyright (C) 2021  System76
  *  Copyright (C) 2021  Jimmy Cassis <KernelOops@outlook.com>
@@ -16,10 +17,13 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+=======
+>>>>>>> a04a16160a (Port changes to other launch boards)
 #include <string.h>
 
 #include "dynamic_keymap.h"
 #include "raw_hid.h"
+<<<<<<< HEAD
 #include "rgb_matrix.h"
 #include "version.h"
 
@@ -224,6 +228,52 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
     data[1] = 1;
 
     switch (data[0]) {
+=======
+#include "version.h"
+
+enum Command {
+    // Probe for System76 EC protocol
+    CMD_PROBE = 1,
+    // Read board string
+    CMD_BOARD = 2,
+    // Read version string
+    CMD_VERSION = 3,
+    // Get keyboard map index
+    CMD_KEYMAP_GET = 9,
+    // Set keyboard map index
+    CMD_KEYMAP_SET = 10,
+};
+
+static bool keymap_get(uint8_t layer, uint8_t output, uint8_t input, uint16_t *value) {
+	if (layer < dynamic_keymap_get_layer_count()) {
+		if (output < MATRIX_ROWS) {
+			if (input < MATRIX_COLS) {
+				*value = dynamic_keymap_get_keycode(layer, output, input);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+static bool keymap_set(uint8_t layer, uint8_t output, uint8_t input, uint16_t value) {
+	if (layer < dynamic_keymap_get_layer_count()) {
+		if (output < MATRIX_ROWS) {
+			if (input < MATRIX_COLS) {
+				dynamic_keymap_set_keycode(layer, output, input, value);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+void raw_hid_receive(uint8_t *data, uint8_t length) {
+	// Error response by default, set to success by commands
+	data[1] = 1;
+
+	switch (data[0]) {
+>>>>>>> a04a16160a (Port changes to other launch boards)
         case CMD_PROBE:
             // Signature
             data[2] = 0x76;
@@ -240,6 +290,7 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
             strncpy((char *)&data[2], QMK_VERSION, length - 2);
             data[1] = 0;
             break;
+<<<<<<< HEAD
         case CMD_RESET:
             if (bootloader_unlocked) {
                 data[1] = 0;
@@ -417,4 +468,28 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
         // Jump to the bootloader
         bootloader_jump();
     }
+=======
+		case CMD_KEYMAP_GET:
+			{
+				uint16_t value = 0;
+				if (keymap_get(data[2], data[3], data[4], &value)) {
+					data[5] = (uint8_t)value;
+					data[6] = (uint8_t)(value >> 8);
+					data[1] = 0;
+				}
+			}
+			break;
+        case CMD_KEYMAP_SET:
+            {
+				uint16_t value =
+                    ((uint16_t)data[5]) |
+                    (((uint16_t)data[6]) << 8);
+				if (keymap_set(data[2], data[3], data[4], value)) {
+					data[1] = 0;
+				}
+            }
+	}
+
+	raw_hid_send(data, length);
+>>>>>>> a04a16160a (Port changes to other launch boards)
 }

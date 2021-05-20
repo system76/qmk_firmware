@@ -320,7 +320,7 @@ extcoff: $(BUILD_DIR)/$(TARGET).elf
 
 bootloader:
 ifeq ($(strip $(BOOTLOADER)), atmel-dfu)
-	cp util/bootloader_$(MCU)_1_0_0.hex $(TARGET)_bootloader.hex
+	cp util/bootloader_$(MCU)_1.0.0.hex $(TARGET)_bootloader.hex
 else
 	make -C lib/lufa/Bootloaders/DFU/ clean
 	$(TMK_DIR)/make_dfu_header.sh $(ALL_CONFIGS)

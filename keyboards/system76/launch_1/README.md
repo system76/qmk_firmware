@@ -36,4 +36,4 @@ If you want to create your own layout, go to the `keymaps` directory and copy on
 
 Inside of each layout directory, there is a file called `keymap.c`. The commented out grid area in this file is a visual reference for the actual key assignments below it. When modifying a layout, modifying this visual reference first makes it easier to design a layout, as well as keeping the actual layout below it organized.
 
-Once your layout is designed, change the keycodes below to match your design. A full list of available keycodes can be found in the [QMK docs](https://beta.docs.qmk.fm/reference/keycodes). Use the shorter keycode alias to help keep these lined up (e.g. use `KC_ESC` instead of `KC_ESCAPE`).
+Once your layout is designed, change the keycodes below to match your design. A full list of available keycodes can be found in the [QMK docs](https://docs.qmk.fm/#/keycodes). Use the shorter keycode alias to help keep these lined up (e.g. use `KC_ESC` instead of `KC_ESCAPE`).

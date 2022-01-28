@@ -5,7 +5,7 @@
 
 /* USB Device descriptor parameter */
 #define VENDOR_ID       0x3384
-#define PRODUCT_ID      0x0001
+#define PRODUCT_ID      0x0005
 #define DEVICE_VER      0x0001
 #define MANUFACTURER    System76
 #define PRODUCT         Launch Configurable Keyboard (launch_lite_1)

@@ -17,7 +17,7 @@ F_USB = 16000000
 #   QMK DFU      qmk-dfu
 #   ATmega32A    bootloadHID
 #   ATmega328P   USBasp
-BOOTLOADER = atmel-dfu
+BOOTLOADER = qmk-dfu
 
 # Build Options
 #   comment out to disable the options.

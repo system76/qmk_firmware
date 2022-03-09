@@ -25,7 +25,7 @@ make system76/launch_lite_1:default:production
 ```
   - Run avrdude to flash the fuses:
 ```
-avrdude -c usbasp -p at90usb646 -U lfuse:w:0x5E:m -U hfuse:w:0xD9:m -U efuse:w:0xCB:m
+avrdude -c usbasp -p at90usb646 -U lfuse:w:0x5E:m -U hfuse:w:0xDB:m -U efuse:w:0xFB:m -U lock:w:0xFF:m
 ```
   - Run avrdude to flash the ROM:
 ```

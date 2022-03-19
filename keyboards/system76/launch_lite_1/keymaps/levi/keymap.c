@@ -1,5 +1,8 @@
 #include QMK_KEYBOARD_H
 
+static bool lctl_pressed, rctl_pressed, esc_pressed;
+void system76_ec_unlock(void);
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   /* Layer 0, dvorak layer
@@ -73,9 +76,6 @@ ________________________________________________________________________________
   |            |        |       |        |                 |                 |        |        |             |   |        |        |        |
   |            |        |       |        |    BACKSPACE    |                 |        |        |             |   |  HOME  |  PGDN  |  END   |
   |____________|________|_______|________|_________________|_________________|________|________|_____________|   |________|________|________|
-
-* 'RESET' resets the controller and puts the board into firmware flashing mode. If this key is hit accidentally, just unplug the board
-*        and plug it back in.
 */
 
   [2] = LAYOUT(
@@ -96,5 +96,22 @@ ________________________________________________________________________________
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+    case KC_LCTL:
+        lctl_pressed = record->event.pressed;
+        break;
+    case KC_RCTL:
+        rctl_pressed = record->event.pressed;
+        break;
+    case KC_ESC:
+        esc_pressed = record ->event.pressed;
+        break;
+    };
     return true;
+}
+
+void matrix_scan_user(void) {
+    if (lctl_pressed && rctl_pressed && esc_pressed) {
+        system76_ec_unlock();
+    }
 }

@@ -1,5 +1,8 @@
 #include QMK_KEYBOARD_H
 
+static bool lctl_pressed, rctl_pressed, esc_pressed = false;
+void system76_ec_unlock(void);
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   /* Layer 0, default layer
@@ -87,5 +90,22 @@ ________________________________________________________________________________
 };
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+    case KC_LCTL:
+        lctl_pressed = record->event.pressed;
+        break;
+    case KC_RCTL:
+        rctl_pressed = record->event.pressed;
+        break;
+    case KC_ESC:
+        esc_pressed = record ->event.pressed;
+        break;
+    };
     return true;
+}
+
+void matrix_scan_user(void) {
+    if (lctl_pressed && rctl_pressed && esc_pressed) {
+        system76_ec_unlock();
+    }
 }

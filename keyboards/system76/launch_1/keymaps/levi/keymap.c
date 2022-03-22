@@ -1,6 +1,6 @@
 #include QMK_KEYBOARD_H
 
-static bool lctl_pressed, rctl_pressed, esc_pressed;
+static bool lctl_pressed, rctl_pressed, esc_pressed = false;
 void system76_ec_unlock(void);
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {

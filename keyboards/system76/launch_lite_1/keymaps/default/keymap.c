@@ -34,8 +34,8 @@ ________________________________________________________________________________
 |        |        |        |        |        |        |        |        |        |        |        |        |        |             | PLAY/  |
 |   ~    |   F1   |   F2   |   F3   |   F4   |   F5   |   F6   |   F7   |   F8   |   F9   |  F10   |  F11   |  F12   |    DEL      | PAUSE  |
 |________|________|________|________|________|________|________|________|________|________|________|________|________|_____________|________|
-|            |        |        |        |        |        |        |        |        |        |        |        |        |         | VOLUME |
-|PRINT SCREEN|        |        |        |        |        |  HOME  |  PGDN  |  PGUP  |  END   |        |        |        |         |   UP   |
+|            |        |        |        |        |        |        |        |        |        |        |  LED   |  LED   | LED     | VOLUME |
+|PRINT SCREEN|        |        |        |        |        |  HOME  |  PGDN  |  PGUP  |  END   |        |  DOWN  |  UP    | TOGGLE  |   UP   |
 |____________|________|________|________|________|________|________|________|________|________|________|________|________|_________|________|
   |            |        |        |        |        |        |        |        |        |        |        |        |            |   | VOLUME |
   |            |        |        |        |        |        |  LEFT  |  DOWN  |   UP   | RIGHT  |        |        |            |   |  DOWN  |
@@ -50,7 +50,7 @@ ________________________________________________________________________________
 
   [1] = LAYOUT(
     KC_GRV,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_DEL,      KC_MPLY,
-        KC_PSCR, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_VOLU,
+        KC_PSCR, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_HOME, KC_PGDN, KC_PGUP, KC_END,  KC_TRNS, RGB_VAD, RGB_VAI, RGB_TOG, KC_VOLU,
           KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, KC_TRNS, KC_TRNS,    KC_TRNS,     KC_VOLD,
               KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,   KC_TRNS,  KC_PGUP, KC_MUTE,
           KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,     KC_TRNS,          KC_TRNS,      KC_TRNS, KC_TRNS, KC_TRNS,       KC_HOME,  KC_PGDN, KC_END

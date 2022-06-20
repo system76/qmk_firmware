@@ -1,7 +1,10 @@
 #include <util/delay.h>
+#include "quantum.h"
 
 #include "i2c.h"
 #include "usb_mux.h"
+
+#define GPIO_RESET_USB A3
 
 #define REG_PF1_CTL 0xBF800C04
 #define REG_PIO64_OEN 0xBF800908
@@ -425,6 +428,11 @@ void usb_mux_event(void) {
 void usb_mux_init(void) {
     // Run I2C bus at 100 KHz
     i2c_init(100000);
+
+    // Sleep 10ms then bring hub out of reset
+    _delay_ms(10);
+    setPinOutput(GPIO_RESET_USB);
+    writePinHigh(GPIO_RESET_USB);
 
     // Set up hub
     usb7206_init(&usb_hub);

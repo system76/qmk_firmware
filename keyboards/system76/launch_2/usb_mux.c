@@ -429,10 +429,11 @@ void usb_mux_init(void) {
     // Run I2C bus at 100 KHz
     i2c_init(100000);
 
-    // Sleep 10ms then bring hub out of reset
+    // Sleep 10 ms, bring hub out of reset, sleep another 1 ms
     _delay_ms(10);
     setPinOutput(GPIO_RESET_USB);
     writePinHigh(GPIO_RESET_USB);
+    _delay_ms(1);
 
     // Set up hub
     usb7206_init(&usb_hub);

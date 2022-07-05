@@ -11,7 +11,7 @@
 #define REG_PIO64_OUT 0xBF800928
 #define REG_VID 0xBF803000
 #define REG_PRT_SWAP 0xBF8030FA
-#define REG_USB3_HUB_VID 0xBFD2E548
+#define REG_USB3_HUB_VID 0xBF809048
 #define REG_RUNTIME_FLAGS2 0xBFD23408
 #define REG_I2S_FEAT_SEL 0xBFD23412
 
@@ -429,11 +429,13 @@ void usb_mux_init(void) {
     // Run I2C bus at 100 KHz
     i2c_init(100000);
 
-    // Sleep 10 ms, bring hub out of reset, sleep another 1 ms
+    // Sleep 10 ms, bring hub out of reset
     _delay_ms(10);
     setPinOutput(GPIO_RESET_USB);
     writePinHigh(GPIO_RESET_USB);
     _delay_ms(1);
+    // Per Microchip support, wait 100 ms after reset with I2C idle
+    _delay_ms(100);
 
     // Set up hub
     usb7206_init(&usb_hub);

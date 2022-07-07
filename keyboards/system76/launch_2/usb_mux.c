@@ -15,15 +15,15 @@
 #define REG_RUNTIME_FLAGS2 0xBFD23408
 #define REG_I2S_FEAT_SEL 0xBFD23412
 
-struct USB7206 {
+struct USB7006 {
     uint8_t addr;
 };
 
-struct USB7206 usb_hub = { .addr = 0x2D };
+struct USB7006 usb_hub = { .addr = 0x2D };
 
-// Perform USB7206 register access
+// Perform USB7006 register access
 // Returns bytes written on success or negative number on error
-int usb7206_register_access(struct USB7206 * self) {
+int usb7006_register_access(struct USB7006 * self) {
     uint8_t data[3] = {
         0x99,
         0x37,
@@ -32,9 +32,9 @@ int usb7206_register_access(struct USB7206 * self) {
     return i2c_send(self->addr, data, sizeof(data));
 }
 
-// Read data from USB7206 register region
+// Read data from USB7006 register region
 // Returns number of bytes read on success or negative number on error
-int usb7206_read_reg(struct USB7206 * self, uint32_t addr, uint8_t * data, int length) {
+int usb7006_read_reg(struct USB7006 * self, uint32_t addr, uint8_t * data, int length) {
     int res;
 
     uint8_t command[9] = {
@@ -60,7 +60,7 @@ int usb7206_read_reg(struct USB7206 * self, uint32_t addr, uint8_t * data, int l
     res = i2c_send(self->addr, command, sizeof(command));
     if (res < 0) return res;
 
-    res = usb7206_register_access(self);
+    res = usb7006_register_access(self);
     if (res < 0) return res;
 
     res = i2c_start(self->addr, false);
@@ -90,14 +90,14 @@ int usb7206_read_reg(struct USB7206 * self, uint32_t addr, uint8_t * data, int l
     return length;
 }
 
-// Read 32-bit value from USB7206 register region
+// Read 32-bit value from USB7006 register region
 // Returns number of bytes read on success or negative number on error
-int usb7206_read_reg_32(struct USB7206 * self, uint32_t addr, uint32_t * data) {
+int usb7006_read_reg_32(struct USB7006 * self, uint32_t addr, uint32_t * data) {
     int res;
 
     // First byte is available length
     uint8_t bytes[4] = { 0, 0, 0, 0, };
-    res = usb7206_read_reg(self, addr, bytes, sizeof(bytes));
+    res = usb7006_read_reg(self, addr, bytes, sizeof(bytes));
     if (res < 0) return res;
 
     // Must convert from little endian
@@ -110,9 +110,9 @@ int usb7206_read_reg_32(struct USB7206 * self, uint32_t addr, uint32_t * data) {
     return res;
 }
 
-// Write data to USB7206 register region
+// Write data to USB7006 register region
 // Returns number of bytes written on success or negative number on error
-int usb7206_write_reg(struct USB7206 * self, uint32_t addr, uint8_t * data, int length) {
+int usb7006_write_reg(struct USB7006 * self, uint32_t addr, uint8_t * data, int length) {
     int res;
 
     res = i2c_start(self->addr, false);
@@ -147,21 +147,21 @@ int usb7206_write_reg(struct USB7206 * self, uint32_t addr, uint8_t * data, int 
 
     i2c_stop();
 
-    res = usb7206_register_access(self);
+    res = usb7006_register_access(self);
     if (res < 0) return res;
 
     return length;
 }
 
-// Write 8-bit value to USB7206 register region
+// Write 8-bit value to USB7006 register region
 // Returns number of bytes written on success or negative number on error
-int usb7206_write_reg_8(struct USB7206 * self, uint32_t addr, uint8_t data) {
-    return usb7206_write_reg(self, addr, &data, sizeof(data));
+int usb7006_write_reg_8(struct USB7006 * self, uint32_t addr, uint8_t data) {
+    return usb7006_write_reg(self, addr, &data, sizeof(data));
 }
 
-// Write 32-bit value to USB7206 register region
+// Write 32-bit value to USB7006 register region
 // Returns number of bytes written on success or negative number on error
-int usb7206_write_reg_32(struct USB7206 * self, uint32_t addr, uint32_t data) {
+int usb7006_write_reg_32(struct USB7006 * self, uint32_t addr, uint32_t data) {
     // Must convert to little endian
     uint8_t bytes[4] = {
         (uint8_t)(data >> 0),
@@ -169,44 +169,44 @@ int usb7206_write_reg_32(struct USB7206 * self, uint32_t addr, uint32_t data) {
         (uint8_t)(data >> 16),
         (uint8_t)(data >> 24),
     };
-    return usb7206_write_reg(self, addr, bytes, sizeof(bytes));
+    return usb7006_write_reg(self, addr, bytes, sizeof(bytes));
 }
 
-// Initialize USB7206
+// Initialize USB7006
 // Returns zero on success or negative number on error
-int usb7206_init(struct USB7206 * self) {
+int usb7006_init(struct USB7006 * self) {
     int res;
 
     // DM and DP are swapped on ports 2 and 3
-    res = usb7206_write_reg_8(self, REG_PRT_SWAP, 0x0C);
+    res = usb7006_write_reg_8(self, REG_PRT_SWAP, 0x0C);
     if (res < 0) return res;
 
     // Disable audio
-    res = usb7206_write_reg_8(self, REG_I2S_FEAT_SEL, 0);
+    res = usb7006_write_reg_8(self, REG_I2S_FEAT_SEL, 0);
     if (res < 0) return res;
 
     // Set HFC_DISABLE
     uint32_t data = 0;
-    res = usb7206_read_reg_32(self, REG_RUNTIME_FLAGS2, &data);
+    res = usb7006_read_reg_32(self, REG_RUNTIME_FLAGS2, &data);
     if (res < 0) return res;
     data |= 1;
-    res = usb7206_write_reg_32(self, REG_RUNTIME_FLAGS2, data);
+    res = usb7006_write_reg_32(self, REG_RUNTIME_FLAGS2, data);
     if (res < 0) return res;
 
     // Set Vendor ID and Product ID of USB 2 hub
-    res = usb7206_write_reg_32(self, REG_VID, 0x00033384);
+    res = usb7006_write_reg_32(self, REG_VID, 0x00033384);
     if (res < 0) return res;
 
     // Set Vendor ID and Product ID of USB 3 hub
-    res = usb7206_write_reg_32(self, REG_USB3_HUB_VID, 0x00043384);
+    res = usb7006_write_reg_32(self, REG_USB3_HUB_VID, 0x00043384);
     if (res < 0) return res;
 
     return 0;
 }
 
-// Attach USB7206
+// Attach USB7006
 // Returns bytes written on success or negative number on error
-int usb7206_attach(struct USB7206 * self) {
+int usb7006_attach(struct USB7006 * self) {
     uint8_t data[3] = {
         0xAA,
         0x56,
@@ -215,36 +215,36 @@ int usb7206_attach(struct USB7206 * self) {
     return i2c_send(self->addr, data, sizeof(data));
 }
 
-struct USB7206_GPIO {
-    struct USB7206 * usb7206;
+struct USB7006_GPIO {
+    struct USB7006 * usb7006;
     uint32_t pf;
 };
 
 // UP_SEL = PF29 = GPIO93
-struct USB7206_GPIO usb_gpio_sink = {
-    .usb7206 = &usb_hub,
+struct USB7006_GPIO usb_gpio_sink = {
+    .usb7006 = &usb_hub,
     .pf = 29,
 };
 
 // CL_SEL = PF10 = GPIO74
-struct USB7206_GPIO usb_gpio_source_left = {
-    .usb7206 = &usb_hub,
+struct USB7006_GPIO usb_gpio_source_left = {
+    .usb7006 = &usb_hub,
     .pf = 10,
 };
 
 // CR_SEL = PF25 = GPIO88
-struct USB7206_GPIO usb_gpio_source_right = {
-    .usb7206 = &usb_hub,
+struct USB7006_GPIO usb_gpio_source_right = {
+    .usb7006 = &usb_hub,
     .pf = 25,
 };
 
-// Set USB7206 GPIO to specified value
+// Set USB7006 GPIO to specified value
 // Returns zero on success or negative number on error
-int usb7206_gpio_set(struct USB7206_GPIO * self, bool value) {
+int usb7006_gpio_set(struct USB7006_GPIO * self, bool value) {
     int res;
 
     uint32_t data = 0;
-    res = usb7206_read_reg_32(self->usb7206, REG_PIO64_OUT, &data);
+    res = usb7006_read_reg_32(self->usb7006, REG_PIO64_OUT, &data);
     if (res < 0) return res;
 
     if (value) {
@@ -252,31 +252,31 @@ int usb7206_gpio_set(struct USB7206_GPIO * self, bool value) {
     } else {
         data &= ~(((uint32_t)1) << self->pf);
     }
-    res = usb7206_write_reg_32(self->usb7206, REG_PIO64_OUT, data);
+    res = usb7006_write_reg_32(self->usb7006, REG_PIO64_OUT, data);
     if (res < 0) return res;
 
     return 0;
 }
 
-// Initialize USB7206 GPIO
+// Initialize USB7006 GPIO
 // Returns zero on success or negative number on error
-int usb7206_gpio_init(struct USB7206_GPIO * self) {
+int usb7006_gpio_init(struct USB7006_GPIO * self) {
     int res = 0;
 
     // Set programmable function to GPIO
-    res = usb7206_write_reg_8(self->usb7206, REG_PF1_CTL + (self->pf - 1), 0);
+    res = usb7006_write_reg_8(self->usb7006, REG_PF1_CTL + (self->pf - 1), 0);
     if (res < 0) return res;
 
     // Set GPIO to false by default
-    usb7206_gpio_set(self, false);
+    usb7006_gpio_set(self, false);
 
     // Set GPIO to output
     uint32_t data = 0;
-    res = usb7206_read_reg_32(self->usb7206, REG_PIO64_OEN, &data);
+    res = usb7006_read_reg_32(self->usb7006, REG_PIO64_OEN, &data);
     if (res < 0) return res;
 
     data |= (((uint32_t)1) << self->pf);
-    res = usb7206_write_reg_32(self->usb7206, REG_PIO64_OEN, data);
+    res = usb7006_write_reg_32(self->usb7006, REG_PIO64_OEN, data);
     if (res < 0) return res;
 
     return 0;
@@ -295,7 +295,7 @@ struct PTN5110 {
     enum TCPC_TYPE type;
     uint8_t addr;
     uint8_t cc;
-    struct USB7206_GPIO * gpio;
+    struct USB7006_GPIO * gpio;
 };
 
 struct PTN5110 usb_sink = { .type = TCPC_TYPE_SINK, .addr = 0x51, .gpio = &usb_gpio_sink };
@@ -317,7 +317,7 @@ int ptn5110_set_role_control(struct PTN5110 * self, uint8_t role_control) {
 // Set PTN5110 SSMUX orientation
 // Returns zero on success or negative number on error
 int ptn5110_set_ssmux(struct PTN5110 * self, bool orientation) {
-    return usb7206_gpio_set(self->gpio, orientation);
+    return usb7006_gpio_set(self->gpio, orientation);
 }
 
 // Write PTN5110 COMMAND
@@ -396,7 +396,7 @@ int ptn5110_init(struct PTN5110 * self) {
     self->cc = 0xFF;
 
     // Initialize GPIO
-    res = usb7206_gpio_init(self->gpio);
+    res = usb7006_gpio_init(self->gpio);
     if (res < 0) return res;
 
     switch (self->type) {
@@ -438,7 +438,7 @@ void usb_mux_init(void) {
     _delay_ms(100);
 
     // Set up hub
-    usb7206_init(&usb_hub);
+    usb7006_init(&usb_hub);
 
     // Set up sink
     ptn5110_init(&usb_sink);
@@ -448,7 +448,7 @@ void usb_mux_init(void) {
     ptn5110_init(&usb_source_right);
 
     // Attach hub
-    usb7206_attach(&usb_hub);
+    usb7006_attach(&usb_hub);
 
     // Ensure orientation is correct after attaching hub
     //TODO: find reason why GPIO for sink orientation is reset

@@ -433,7 +433,6 @@ void usb_mux_init(void) {
     _delay_ms(10);
     setPinOutput(GPIO_RESET_USB);
     writePinHigh(GPIO_RESET_USB);
-    _delay_ms(1);
     // Per Microchip support, wait 100 ms after reset with I2C idle
     _delay_ms(100);
 

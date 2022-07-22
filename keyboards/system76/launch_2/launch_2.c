@@ -5,6 +5,9 @@
 #include "usb_mux.h"
 #include "rgb_matrix.h"
 
+// USB hub reset on PA3
+#define GPIO_MASK_RESET_USB (1<<3)
+
 #if RGB_MATRIX_ENABLE
 // LEDs by index
 //    0   1   2   3   4   5   6   7   8   9
@@ -243,21 +246,18 @@ void bootloader_jump(void) {
     TIMSK3 = 0;
     UCSR1B = 0;
     TWCR   = 0;
-    DDRA   = 0;
+    DDRA   = GPIO_MASK_RESET_USB;
     DDRB   = 0;
     DDRC   = 0;
     DDRD   = 0;
     DDRE   = 0;
     DDRF   = 0;
-    PORTA  = 0;
+    PORTA  = GPIO_MASK_RESET_USB;
     PORTB  = 0;
     PORTC  = 0;
     PORTD  = 0;
     PORTE  = 0;
     PORTF  = 0;
-
-    // initialize USB hub before jumping to bootloader
-    usb_mux_init();
 
     // finally, jump to bootloader
     asm volatile("jmp 0xFC00");

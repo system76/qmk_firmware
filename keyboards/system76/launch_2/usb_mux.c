@@ -426,12 +426,15 @@ void usb_mux_event(void) {
 }
 
 void usb_mux_init(void) {
+    // Put the USB hub in reset
+    setPinOutput(GPIO_RESET_USB);
+    writePinLow(GPIO_RESET_USB);
+
     // Run I2C bus at 100 KHz
     i2c_init(100000);
 
     // Sleep 10 ms, bring hub out of reset
     _delay_ms(10);
-    setPinOutput(GPIO_RESET_USB);
     writePinHigh(GPIO_RESET_USB);
     // Per Microchip support, wait 100 ms after reset with I2C idle
     _delay_ms(100);

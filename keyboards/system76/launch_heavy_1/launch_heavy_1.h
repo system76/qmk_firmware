@@ -3,7 +3,7 @@
 
 #include "quantum.h"
 
-#define ___ KC_NO
+#define xxx KC_NO
 
 #define LAYOUT( \
  K00, K01, K02, K03, K04, K05, K06, K07, K08, K09, K0A, K0B, K0C,  K0D,  K0E,  K6B, K65, K64, K63, \
@@ -19,12 +19,12 @@
     { K30, K31, K32, K33, K34, K35, K36, K37, K38, K39, K3A, K3B, K3C, K0E }, \
     { K40, K41, K42, K43, K44, K45, K46, K47, K48, K49, K4A, K4B, K4C, K1E }, \
     { K50, K51, K52, K53, K54, K3D, K55, K56, K57, K58, K59, K5A, K5B, K2E }, \
-    { ___, ___, ___, K63, K64, K65, ___, ___, ___, ___, ___, K6B, ___, ___ }, \
-    { ___, ___, ___, K73, K74, K75, ___, ___, ___, ___, ___, K7B, ___, ___ }, \
-    { ___, ___, ___, K83, K84, K85, ___, ___, ___, ___, ___, K8B, ___, ___ }, \
-    { ___, ___, ___, ___, K94, K95, ___, ___, ___, ___, ___, K9B, ___, ___ }, \
-    { ___, ___, ___, KA3, KA4, KA5, ___, ___, ___, ___, ___, KAB, ___, ___ }, \
-    { ___, ___, ___, ___, KB4, ___, ___, ___, ___, ___, ___, KBB, ___, ___ }, \
+    { xxx, xxx, xxx, K63, K64, K65, xxx, xxx, xxx, xxx, xxx, K6B, xxx, xxx }, \
+    { xxx, xxx, xxx, K73, K74, K75, xxx, xxx, xxx, xxx, xxx, K7B, xxx, xxx }, \
+    { xxx, xxx, xxx, K83, K84, K85, xxx, xxx, xxx, xxx, xxx, K8B, xxx, xxx }, \
+    { xxx, xxx, xxx, xxx, K94, K95, xxx, xxx, xxx, xxx, xxx, K9B, xxx, xxx }, \
+    { xxx, xxx, xxx, KA3, KA4, KA5, xxx, xxx, xxx, xxx, xxx, KAB, xxx, xxx }, \
+    { xxx, xxx, xxx, xxx, KB4, xxx, xxx, xxx, xxx, xxx, xxx, KBB, xxx, xxx }, \
 }
 
 #endif // LAUNCH_HEAVY_1_H

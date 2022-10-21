@@ -40,7 +40,7 @@
 
 #if RGB_MATRIX_ENABLE
     #define RGB_DI_PIN F7
-    #define DRIVER_LED_TOTAL 84
+    #define DRIVER_LED_TOTAL 105
     #define RGB_MATRIX_KEYPRESSES // reacts to keypresses
     //#define RGB_MATRIX_KEYRELEASES // reacts to keyreleases (instead of keypresses)
     //#define RGB_MATRIX_FRAMEBUFFER_EFFECTS

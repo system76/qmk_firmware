@@ -5,7 +5,7 @@
 
 /* USB Device descriptor parameter */
 #define VENDOR_ID       0x3384
-#define PRODUCT_ID      0x0006
+#define PRODUCT_ID      0x0007
 #define DEVICE_VER      0x0001
 #define MANUFACTURER    System76
 #define PRODUCT         Launch Heavy Configurable Keyboard (launch_heavy_1)

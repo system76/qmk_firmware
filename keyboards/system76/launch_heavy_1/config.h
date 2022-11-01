@@ -63,7 +63,7 @@
 #define LOCKING_RESYNC_ENABLE
 
 // EEPROM {
-#define EEPROM_SIZE 1024
+#define EEPROM_SIZE 2048
 
 // TODO: refactor with new user EEPROM code (coming soon)
 #define EEPROM_MAGIC 0x76EC
@@ -79,6 +79,7 @@
 #define DYNAMIC_KEYMAP_LAYER_COUNT 4
 // Dynamic keymap starts after EEPROM version
 #define DYNAMIC_KEYMAP_EEPROM_ADDR (EEPROM_VERSION_ADDR + 1)
+// `* 2` Beacuse each key needs 16 bits (2 bytes) for storing the keycode
 #define DYNAMIC_KEYMAP_EEPROM_SIZE (DYNAMIC_KEYMAP_LAYER_COUNT * MATRIX_ROWS * MATRIX_COLS * 2)
 // Dynamic macro starts after dynamic keymaps, it is disabled
 #define DYNAMIC_KEYMAP_MACRO_EEPROM_ADDR (DYNAMIC_KEYMAP_EEPROM_ADDR + DYNAMIC_KEYMAP_EEPROM_SIZE)

@@ -19,6 +19,8 @@
 
 #include "usb_mux.h"
 
+#define FLASH_SIZE (FLASHEND + 1L)
+
 #define GPIO_MASK_RESET_USB (1<<3)
 #define __ NO_LED
 
@@ -296,5 +298,5 @@ void bootloader_jump(void) {
     PORTF  = 0;
 
     // finally, jump to bootloader
-    asm volatile("jmp 0xFC00");
+    ((void (*)(void))((FLASH_SIZE - BOOTLOADER_SIZE) >> 1))();
 }

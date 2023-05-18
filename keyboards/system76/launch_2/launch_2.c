@@ -89,7 +89,10 @@ void bootmagic_lite(void) {
     // reset the EEPROM valid state and jump to bootloader.
     if ( matrix_get_row(0) & (1<<0) ) {
         eeprom_reset();
+        usb_mux_init();
         bootloader_jump();
+    } else {
+        usb_mux_init();
     }
 }
 
@@ -100,8 +103,6 @@ bool system76_ec_is_unlocked(void);
 rgb_config_t layer_rgb[DYNAMIC_KEYMAP_LAYER_COUNT];
 
 void matrix_init_kb(void) {
-    usb_mux_init();
-
     bootmagic_lite();
     if (!eeprom_is_valid()) {
         dynamic_keymap_reset();

@@ -92,7 +92,7 @@ void bootmagic_lite(void) {
     // reset the EEPROM valid state and jump to bootloader.
     if ( matrix_get_row(0) & (1<<0) ) {
         eeprom_reset();
-        bootloader_jump();
+        application_check_jump();
     } else {
         usb_mux_init();
     }

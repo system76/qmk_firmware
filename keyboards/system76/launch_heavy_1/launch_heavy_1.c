@@ -6,6 +6,8 @@
 #include "rgb_matrix.h"
 #include <avr/wdt.h>
 
+#define GPIO_MASK_RESET_USB (1<<3)
+
 #if RGB_MATRIX_ENABLE
 // LEDs by index
 //    0   1   2   3   4   5   6   7   8   9
@@ -96,7 +98,7 @@ void bootmagic_lite(void) {
     // reset the EEPROM valid state and jump to bootloader.
     if ( matrix_get_row(0) & (1<<0) ) {
         eeprom_reset();
-        bootloader_jump();
+        application_check_jump();
     } else {
         usb_mux_init();
     }
@@ -260,13 +262,13 @@ void bootloader_jump(void) {
     TIMSK3 = 0;
     UCSR1B = 0;
     TWCR   = 0;
-    DDRA   = 0;
+    DDRA   = GPIO_MASK_RESET_USB;
     DDRB   = 0;
     DDRC   = 0;
     DDRD   = 0;
     DDRE   = 0;
     DDRF   = 0;
-    PORTA  = 0;
+    PORTA  = GPIO_MASK_RESET_USB;
     PORTB  = 0;
     PORTC  = 0;
     PORTD  = 0;
@@ -299,13 +301,13 @@ void application_check_jump(void) {
     TIMSK3 = 0;
     UCSR1B = 0;
     TWCR   = 0;
-    DDRA   = 0;
+    DDRA   = GPIO_MASK_RESET_USB;
     DDRB   = 0;
     DDRC   = 0;
     DDRD   = 0;
     DDRE   = 0;
     DDRF   = 0;
-    PORTA  = 0;
+    PORTA  = GPIO_MASK_RESET_USB;
     PORTB  = 0;
     PORTC  = 0;
     PORTD  = 0;

@@ -1,0 +1,9 @@
+{
+    "keyboard_name": "Virgo Stick Test 1",
+    "manufacturer": "System76",
+    "usb": {
+        "vid": "0x3384",
+        "pid": "0x0001",
+        "device_version": "0.0.1"
+    }
+}

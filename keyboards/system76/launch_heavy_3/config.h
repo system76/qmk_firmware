@@ -77,7 +77,7 @@
 // } I2C
 
 // EEPROM {
-#define EEPROM_SIZE 1024
+#define EEPROM_SIZE 2048
 // TODO: Refactor with new user EEPROM code (coming soon)
 #define EEPROM_MAGIC 0x76EC
 #define EEPROM_MAGIC_ADDR 64

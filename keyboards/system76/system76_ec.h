@@ -35,10 +35,12 @@ bool system76_ec_is_unlocked(void);
 
 bool system76_ec_fan_get(uint8_t index, uint8_t * duty);
 bool system76_ec_fan_set(uint8_t index, uint8_t duty);
-bool system76_ec_fan_tach(uint8_t index, uint16_t * tach);
+bool system76_ec_fan_get_rpm(uint8_t index, uint16_t * tach);
 
 bool system76_ec_led_get_mode(uint8_t layer, uint8_t * mode, uint8_t * speed);
 bool system76_ec_led_set_mode(uint8_t layer, uint8_t mode, uint8_t speed);
 
 bool system76_ec_security_get(enum SecurityState * state);
 bool system76_ec_security_set(enum SecurityState state);
+
+bool system76_ec_case_rev(uint8_t *buf, size_t size, bool write);

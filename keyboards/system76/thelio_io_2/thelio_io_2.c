@@ -16,6 +16,8 @@
  */
 
 #include "analog.h"
+#include "config.h"
+#include "eeprom.h"
 #include "../system76_ec.h"
 
 #include "thelio_io_2.h"
@@ -184,6 +186,27 @@ void keyboard_pre_init_kb(void) {
 
     // Call user pre_init function
     keyboard_pre_init_user();
+}
+
+bool eeprom_is_valid(void) {
+    return (
+        eeprom_read_word(((void *)EEPROM_MAGIC_ADDR)) == EEPROM_MAGIC &&
+        eeprom_read_byte(((void *)EEPROM_VERSION_ADDR)) == EEPROM_VERSION
+    );
+}
+// clang-format on
+
+void eeprom_set_valid(bool valid) {
+    eeprom_update_word(((void *)EEPROM_MAGIC_ADDR), valid ? EEPROM_MAGIC : 0xFFFF);
+    eeprom_update_byte(((void *)EEPROM_VERSION_ADDR), valid ? EEPROM_VERSION : 0xFF);
+}
+
+void matrix_init_kb(void) {
+    if (!eeprom_is_valid()) {
+        uint8_t rev[SYSTEM76_EC_EEPROM_CASE_REV_SIZE] = { 0 };
+        system76_ec_case_rev(rev, SYSTEM76_EC_EEPROM_CASE_REV_SIZE, true);
+        eeprom_set_valid(true);
+    }
 }
 
 void keyboard_post_init_kb(void) {
@@ -416,19 +439,19 @@ bool system76_ec_fan_set(uint8_t index, uint8_t duty) {
     return true;
 }
 
-bool system76_ec_fan_tach(uint8_t index, uint16_t * tach) {
+bool system76_ec_fan_get_rpm(uint8_t index, uint16_t * rpm) {
     switch (index) {
         case 0:
-            *tach = FANOUT1.tach;
+            *rpm = FANOUT1.tach;
             return true;
         case 1:
-            *tach = FANOUT2.tach;
+            *rpm = FANOUT2.tach;
             return true;
         case 2:
-            *tach = FANOUT3.tach;
+            *rpm = FANOUT3.tach;
             return true;
         case 3:
-            *tach = FANOUT4.tach;
+            *rpm = FANOUT4.tach;
             return true;
         default:
             return false;

@@ -21,6 +21,7 @@
 #include "eeprom.h"
 #include "quantum.h"
 #include "raw_hid.h"
+#include "thelio_io_2/config.h"
 #include "version.h"
 #ifdef DYNAMIC_KEYMAP_ENABLE
     #include "dynamic_keymap.h"
@@ -48,7 +49,11 @@ enum Command {
     CMD_SET_NO_INPUT  = 19,  // Enable/disable no input mode
     CMD_SECURITY_GET  = 20,  // Get security state
     CMD_SECURITY_SET  = 21,  // Set security state
-    CMD_FAN_TACH      = 22,  // Get fan tachometer
+    CMD_FAN_GET_RPM   = 22,  // Get fan rpm
+    CMD_FAN_GET_MODE  = 23,  // Get fan mode
+    CMD_FAN_SET_MODE  = 24,  // Set fan mode
+    CMD_CASE_REV_GET  = 25,  // Get case revision
+    CMD_CASE_REV_SET  = 26,  // Set case revision
 };
 
 bool input_disabled = false;
@@ -103,7 +108,7 @@ __attribute__((weak)) bool system76_ec_fan_set(uint8_t index, uint8_t duty) {
     return false;
 }
 
-__attribute__((weak)) bool system76_ec_fan_tach(uint8_t index, uint16_t * tach) {
+__attribute__((weak)) bool system76_ec_fan_get_rpm(uint8_t index, uint16_t * rpm) {
     return false;
 }
 
@@ -258,6 +263,20 @@ void system76_ec_rgb_layer(layer_state_t layer_state) {
     }
 }
 #endif  // RGB_MATRIX_CUSTOM_KB
+
+// Read or write EEPROM data with checks for being inside System76 EC region.
+bool system76_ec_case_rev(uint8_t *buf, size_t size, bool write) {
+#ifdef SYSTEM76_EC_EEPROM_CASE_REV_ADDR
+    if (write) {
+        eeprom_update_block((const void *)buf, (void *)SYSTEM76_EC_EEPROM_CASE_REV_ADDR, size);
+    } else {
+        eeprom_read_block((void *)buf, (const void *)SYSTEM76_EC_EEPROM_CASE_REV_ADDR, size);
+    }
+    return true;
+#endif
+
+    return false;
+}
 
 void raw_hid_receive(uint8_t *data, uint8_t length) {
     // Error response by default, set to success by commands
@@ -468,11 +487,11 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
             input_disabled = data[2] != 0;
             data[1] = 0;
         } break;
-        case CMD_FAN_TACH: {
-            uint16_t tach = 0;
-            if (system76_ec_fan_tach(data[2], &tach)) {
-                data[3] = (uint8_t)tach;
-                data[4] = (uint8_t)(tach >> 8);
+        case CMD_FAN_GET_RPM: {
+            uint16_t rpm = 0;
+            if (system76_ec_fan_get_rpm(data[2], &rpm)) {
+                data[3] = (uint8_t)rpm;
+                data[4] = (uint8_t)(rpm >> 8);
                 data[1] = 0;
             }
         } break;
@@ -483,6 +502,16 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
             break;
         case CMD_SECURITY_SET:
             if (system76_ec_security_set(data[2])) {
+                data[1] = 0;
+            }
+            break;
+        case CMD_CASE_REV_GET:
+            if (system76_ec_case_rev(&data[2], SYSTEM76_EC_EEPROM_CASE_REV_SIZE, false)) {
+                data[1] = 0;
+            }
+            break;
+        case CMD_CASE_REV_SET:
+            if (system76_ec_case_rev(&data[2], SYSTEM76_EC_EEPROM_CASE_REV_SIZE, true)) {
                 data[1] = 0;
             }
             break;

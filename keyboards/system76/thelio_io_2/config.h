@@ -43,3 +43,20 @@
 #define BACKLIGHT_BREATHING
 #define BACKLIGHT_LEVELS 31
 #define BACKLIGHT_PERIOD 1
+
+// EEPROM {
+#define EEPROM_SIZE 1024
+// TODO: Refactor with new user EEPROM code (coming soon)
+#define EEPROM_MAGIC 0x76EC
+#define EEPROM_MAGIC_ADDR 64
+// Bump this every time we change what we store
+// This will automatically reset the EEPROM with defaults
+// and avoid loading invalid data from the EEPROM
+#define EEPROM_VERSION 0x01
+#define EEPROM_VERSION_ADDR (EEPROM_MAGIC_ADDR + 2)
+// } EEPROM
+
+// System76 EC {
+#define SYSTEM76_EC_EEPROM_CASE_REV_ADDR (EEPROM_VERSION_ADDR + 1)
+#define SYSTEM76_EC_EEPROM_CASE_REV_SIZE 4
+// } System76 EC

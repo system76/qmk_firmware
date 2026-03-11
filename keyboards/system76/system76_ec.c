@@ -21,7 +21,6 @@
 #include "eeprom.h"
 #include "quantum.h"
 #include "raw_hid.h"
-#include "thelio_io_2/config.h"
 #include "version.h"
 #ifdef DYNAMIC_KEYMAP_ENABLE
     #include "dynamic_keymap.h"
@@ -505,6 +504,7 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
                 data[1] = 0;
             }
             break;
+#ifdef SYSTEM76_EC_EEPROM_CASE_REV_SIZE
         case CMD_CASE_REV_GET:
             if (system76_ec_case_rev(&data[2], SYSTEM76_EC_EEPROM_CASE_REV_SIZE, false)) {
                 data[1] = 0;
@@ -515,6 +515,7 @@ void raw_hid_receive(uint8_t *data, uint8_t length) {
                 data[1] = 0;
             }
             break;
+#endif // SYSTEM76_EC_EEPROM_CASE_REV_SIZE
     }
 
     raw_hid_send(data, length);
